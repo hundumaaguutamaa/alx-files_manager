@@ -26,3 +26,16 @@ class DBClient {
 isAlive() {
     return this.connected;
   }
+
+// function retrieves the total number of documents (records) in the MongoDB collection named “users.”
+async nbUsers() {
+    await this.client.connect();
+    const users = await this.client.db(this.database).collection('users').countDocuments();
+    return users;
+  }
+
+  async nbFiles() {
+    await this.client.connect();
+    const users = await this.client.db(this.database).collection('files').countDocuments();
+    return users;
+  }
