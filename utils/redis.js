@@ -18,12 +18,10 @@ class RedisClient {
     }
 
     async get(key) {
-        try {
-            const val = await this.client.get(key);
+       
+            const getAsyncVal = promisify(this.client.get).bind(this.client);
+            const val = await getAsyncVal(key);
             return val;
-        } catch (err) {
-            console.error('Error getting key:', err);
-        }
     }
 
     async set(key, val, dur) {
