@@ -24,14 +24,10 @@ class RedisClient {
             return val;
     }
 
-    async set(key, val, dur) {
-        try {
-            await this.client.setEx(key, dur, val);
-            console.log(`Key ${key} set with value ${val} for ${dur} seconds`);
-        } catch (err) {
-            console.error('Error setting key:', err);
-        }
-    }
+     async set(key, val, dur) {
+         const setAsyncval = promisify(this.client.set).bind(this.client);
+         await setAsyncval(key, val, 'EX', dur);
+  }
 
     async del(key) {
         try {
