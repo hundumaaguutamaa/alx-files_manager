@@ -3,33 +3,27 @@
 const { createClient } = require('redis');
 
 class RedisClient {
-  constructor() {
-    this.client = createClient();
-    this.client.on('error', (err) => console.log(err));
-    this.connected = false;
-    this.client.on('connect', () => {
-      this.connected = true;
-    });
-  }
+    constructor() {
+        this.client = createClient();
+        this.client.on('error', (err) => console.log(err));
+        this.connected = false;
+        this.client.on('connect', () => {
+            this.connected = true;
+        });
+    }
 
-  async get(key) {
-    return new Promise((resolve, reject) => {
-      if (!this.connected) {
-        reject(new Error('Redis client is not connected'));
-        return;
-      }
+    isAlive() {
+        return this.connected;
+    }
 
-      this.client.get(key, (err, reply) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(reply);
+    async get(key) {
+        try {
+            const val = await this.client.get(key);
+            return val;
+        } catch (err) {
+            console.error('Error getting key:', err);
         }
-      });
-    });
-  }
-}
-
+    }
 
     async set(key, val, dur) {
         try {
@@ -52,4 +46,3 @@ class RedisClient {
 
 const redisClient = new RedisClient();
 module.exports = redisClient;
-
