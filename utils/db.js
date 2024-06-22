@@ -1,9 +1,9 @@
 #!/usr/bin/node
 
-// Importing mongodb package to access all components
 const { MongoClient } = require('mongodb');
 const mongo = require('mongodb');
 const { pwdHashed } = require('./utils');
+
 
 // Reads environment variables for the MongoDB host, port, and database name and set defaults
 class DBClient {
