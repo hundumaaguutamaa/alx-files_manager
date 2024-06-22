@@ -19,24 +19,54 @@ class DBClient {
     }).catch((err) => console.log(err.message));
   }
 
+ class DatabaseClient {
   isAlive() {
-    return this.connected;
+    return this.isConnected;
   }
 
-  // Function retrieves the total number of documents (records) in the MongoDB collection named “users.”
   async nbUsers() {
-    await this.client.connect();
-    const users = await this.client.db(this.database).collection('users').countDocuments();
-    return users;
+    await this.mongoClient.connect();
+    const userCount = await this.mongoClient.db(this.dbName).collection('users').countDocuments();
+    return userCount;
   }
 
   async nbFiles() {
-    await this.client.connect();
-    const files = await this.client.db(this.database).collection('files').countDocuments();
-    return files;
+    await this.mongoClient.connect();
+    const fileCount = await this.mongoClient.db(this.dbName).collection('files').countDocuments();
+    return fileCount;
+  }
+
+  async addUser(email, password) {
+    const hashedPassword = hashPassword(password);
+    await this.mongoClient.connect();
+    const newUser = await this.mongoClient.db(this.dbName).collection('users').insertOne({ email, password: hashedPassword });
+    return newUser;
+  }
+
+  async findUserByEmail(email) {
+    await this.mongoClient.connect();
+    const user = await this.mongoClient.db(this.dbName).collection('users').find({ email }).toArray();
+    if (!user.length) {
+      return null;
+    }
+    return user[0];
+  }
+
+  async findUserById(id) {
+    const userId = new mongo.ObjectID(id);
+    await this.mongoClient.connect();
+    const user = await this.mongoClient.db(this.dbName).collection('users').find({ _id: userId }).toArray();
+    if (!user.length) {
+      return null;
+    }
+    return user[0];
+  }
+
+  async doesUserExist(email) {
+    const user = await this.findUserByEmail(email);
+    return !!user;
   }
 }
 
-// Export an instance of DBClient
-const dbClient = new DBClient();
-module.exports = dbClient;
+const databaseClient = new DatabaseClient();
+module.exports = databaseClient;
