@@ -15,3 +15,14 @@ You will be guided step by step for building it, but you have some freedoms of i
 Of course, this kind of service already exists in the real life - it’s a learning purpose to assemble each piece and build a full product.
 
 Enjoy!
+**Reference**
+https://nodejs.org/en/learn/getting-started/introduction-to-nodejs
+https://node.readthedocs.io/en/latest/api/process/
+https://expressjs.com/en/starter/installing.html
+https://mochajs.org/
+https://github.com/remy/nodemon#nodemon
+https://github.com/mongodb/node-mongodb-native
+https://github.com/OptimalBits/bull
+https://www.npmjs.com/package/image-thumbnail
+https://www.npmjs.com/package/mime-types
+https://github.com/redis/node-redis
