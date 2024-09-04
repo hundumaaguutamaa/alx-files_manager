@@ -25,8 +25,8 @@ class RedisClient {
             const value = await this.getAsync(key);
             return value;
         } catch (err) {
-            console.error(`Failed to get key ${key}:`, err);
-            return null;
+            console.error(`Failed to get key "${key}": ${err.message}`);
+            throw err; // You can throw the error to let the caller handle it
         }
     }
 
@@ -34,7 +34,8 @@ class RedisClient {
         try {
             await this.setAsync(key, value, 'EX', duration);
         } catch (err) {
-            console.error(`Failed to set key ${key} with value ${value}:`, err);
+            console.error(`Failed to set key "${key}" with value "${value}" for ${duration}s: ${err.message}`);
+            throw err; // Same for setting, we let the caller handle the error
         }
     }
 
@@ -42,11 +43,11 @@ class RedisClient {
         try {
             await this.delAsync(key);
         } catch (err) {
-            console.error(`Failed to delete key ${key}:`, err);
+            console.error(`Failed to delete key "${key}": ${err.message}`);
+            throw err; // Throwing the error might help in upper logic
         }
     }
 }
 
 const redisClient = new RedisClient();
 module.exports = redisClient;
-
